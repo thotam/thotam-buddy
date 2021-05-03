@@ -15,6 +15,7 @@ class CreateBuddiesTable extends Migration
     {
         Schema::create('buddies', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('buddy_code', 15)->nullable()->default(null)->unique();
             $table->bigInteger('nhom_id')->unsigned()->nullable()->default(null);
             $table->string('quanly_hr_key')->nullable()->default(null);
             $table->longText('nhucau')->nullable()->default(null);

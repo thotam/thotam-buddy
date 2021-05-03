@@ -2,7 +2,10 @@
 
 namespace Thotam\ThotamBuddy;
 
+use Livewire\Livewire;
 use Illuminate\Support\ServiceProvider;
+use Thotam\ThotamBuddy\DataTables\BuddyCaNhanDataTable;
+use Thotam\ThotamBuddy\Http\Livewire\BuddyCaNhanLivewire;
 
 class ThotamBuddyServiceProvider extends ServiceProvider
 {
@@ -15,9 +18,9 @@ class ThotamBuddyServiceProvider extends ServiceProvider
          * Optional methods to load your package assets
          */
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'thotam-buddy');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'thotam-buddy');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'thotam-buddy');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // $this->loadRoutesFrom(__DIR__.'/routes.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -63,5 +66,10 @@ class ThotamBuddyServiceProvider extends ServiceProvider
         $this->app->singleton('thotam-buddy', function () {
             return new ThotamBuddy;
         });
+
+        if (class_exists(Livewire::class)) {
+            Livewire::component('thotam-buddy::buddy-canhan-livewire', BuddyCaNhanLivewire::class);
+            Livewire::component('thotam-buddy::buddy-canhan-datatable', BuddyCaNhanDataTable::class);
+        }
     }
 }
