@@ -3,7 +3,8 @@
     @include('thotam-buddy::livewire.canhan.sub.filters')
 
     <!-- Incluce các modal -->
-    @include('thotam-buddy::livewire.canhan.modal.add_edit_buddy')
+    @include('thotam-buddy::livewire.modal.add_edit_buddy')
+    @include('thotam-buddy::livewire.modal.delete_buddy')
 
     <!-- Scripts -->
     @push('livewires')

@@ -4,8 +4,9 @@ namespace Thotam\ThotamBuddy;
 
 use Livewire\Livewire;
 use Illuminate\Support\ServiceProvider;
-use Thotam\ThotamBuddy\DataTables\BuddyCaNhanDataTable;
+use Thotam\ThotamBuddy\DataTables\BuddyCaNhanTable;
 use Thotam\ThotamBuddy\Http\Livewire\BuddyCaNhanLivewire;
+use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class ThotamBuddyServiceProvider extends ServiceProvider
 {
@@ -69,7 +70,10 @@ class ThotamBuddyServiceProvider extends ServiceProvider
 
         if (class_exists(Livewire::class)) {
             Livewire::component('thotam-buddy::buddy-canhan-livewire', BuddyCaNhanLivewire::class);
-            Livewire::component('thotam-buddy::buddy-canhan-datatable', BuddyCaNhanDataTable::class);
+        }
+
+        if (class_exists(LivewireDatatable::class)) {
+            Livewire::component('thotam-buddy::buddy-canhan-datatable', BuddyCaNhanTable::class);
         }
     }
 }

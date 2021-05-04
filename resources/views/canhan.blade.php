@@ -20,7 +20,7 @@
         @livewire('thotam-buddy::buddy-canhan-livewire')
 
         <div class="px-4 mb-4">
-            <livewire:datatable model="Thotam\ThotamHr\Models\HR" exportable searchable="key" hideable="select"/>
+            @livewire('thotam-buddy::buddy-canhan-datatable')
         </div>
     </div>
 

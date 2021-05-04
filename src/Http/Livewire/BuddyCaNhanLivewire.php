@@ -7,21 +7,11 @@ use Livewire\Component;
 use Thotam\ThotamHr\Models\HR;
 use Thotam\ThotamTeam\Models\Nhom;
 use Thotam\ThotamBuddy\Models\Buddy;
-use Thotam\ThotamPlus\Traits\ThoTamRandomCodeTrait;
+use Thotam\ThotamBuddy\Traits\BuddyTraits;
 
 class BuddyCaNhanLivewire extends Component
 {
-    use ThoTamRandomCodeTrait;
-
-    /**
-    * Các biến sử dụng trong Component
-    *
-    * @var mixed
-    */
-    public $buddy, $buddy_id, $buddy_code, $nhom_id, $quanly_hr_key, $nhucau, $ghichu, $hr_key, $email, $quanly_email, $hoten;
-    public $nhom_arrays = [], $quanly_arrays = [];
-    public $hr;
-    public $modal_title, $toastr_message;
+    use BuddyTraits;
 
     /**
      * @var bool
@@ -36,29 +26,7 @@ class BuddyCaNhanLivewire extends Component
      *
      * @var array
      */
-    protected $listeners = ['dynamic_update_method', 'add_buddy', 'edit_buddy',];
-
-    /**
-     * dynamic_update_method
-     *
-     * @return void
-     */
-    public function dynamic_update_method()
-    {
-        $this->dispatchBrowserEvent('dynamic_update');
-    }
-
-
-    /**
-     * On updated action
-     *
-     * @param  mixed $propertyName
-     * @return void
-     */
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
+    protected $listeners = ['dynamic_update_method', 'add_buddy', 'edit_buddy', 'delete_buddy'];
 
     /**
      * Validation rules
@@ -104,6 +72,7 @@ class BuddyCaNhanLivewire extends Component
         $this->editStatus = false;
         $this->viewStatus = false;
         $this->resetValidation();
+        $this->emitTo('thotam-buddy::buddy-canhan-datatable', 'refreshComponent');
         $this->mount();
     }
 
@@ -120,28 +89,6 @@ class BuddyCaNhanLivewire extends Component
     public function mount()
     {
         $this->hr = Auth::user()->hr;
-    }
-
-    public function updatedNhomId()
-    {
-        $this->quanly_arrays = Nhom::find($this->nhom_id)->nhom_has_quanlys->pluck("hoten", "key");
-        $quanly_arrays = Nhom::find($this->nhom_id)->nhom_has_quanlys;
-        if (count($this->quanly_arrays) == 1) {
-            $this->quanly_hr_key = $quanly_arrays->first()->key;
-            $this->updatedQuanlyHrKey();
-        } else {
-            $this->quanly_hr_key = null;
-            $this->quanly_email = null;
-        }
-    }
-
-    public function updatedQuanlyHrKey()
-    {
-        $this->quanly_email = HR::find($this->quanly_hr_key)->getMail("buddy");
-
-        if (!!$this->quanly_email) {
-            $this->validateOnly("quanly_email");
-        }
     }
 
     /**
@@ -179,70 +126,5 @@ class BuddyCaNhanLivewire extends Component
         $this->dispatchBrowserEvent('unblockUI');
         $this->dispatchBrowserEvent('dynamic_update');
         $this->dispatchBrowserEvent('show_modal', "#add_edit_buddy_modal");
-    }
-    
-    /**
-     * save_buddy
-     *
-     * @return void
-     */
-    public function save_buddy()
-    {
-        if ($this->hr->cannot("add-buddy") && $this->hr->cannot("edit-buddy")) {
-            $this->dispatchBrowserEvent('unblockUI');
-            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Bạn không có quyền thực hiện hành động này"]);
-            return null;
-        }
-
-        $this->dispatchBrowserEvent('unblockUI');
-        $this->validate([
-            'nhom_id' => 'required|exists:nhoms,id',
-            'quanly_hr_key' => 'required|exists:hrs,key',
-            'email' => 'required|email',
-            'quanly_email' => 'required|email',
-            'nhucau' => 'required|string',
-            'ghichu' => 'nullable|string',
-        ]);
-        $this->dispatchBrowserEvent('blockUI');
-
-        try {
-            HR::find($this->quanly_hr_key)->checkAndGetMail($this->quanly_email,"buddy");
-            HR::find($this->hr_key)->checkAndGetMail($this->email,"buddy");
-            $this->buddy = Buddy::updateOrCreate(
-                ['id' => $this->buddy_id],
-                [
-                    "nhom_id" => $this->nhom_id,
-                    "quanly_hr_key" => $this->quanly_hr_key,
-                    "hr_key" => $this->hr_key,
-                    "nhucau" => $this->nhucau,
-                    "ghichu" => $this->ghichu,
-                ]
-            );
-
-            if (!!!$this->buddy->buddy_code) {
-                $this->buddy->update([
-                    "buddy_code" => "BD".sprintf("%03d",$this->buddy->id % 1000).$this->get_random_code(5),
-                    'active' => true,
-                ]);
-            }
-
-            if (!!!$this->buddy->trangthai_id) {
-                $this->buddy->update(["trangthai_id" => 5]);
-            }
-        } catch (\Illuminate\Database\QueryException $e) {
-            $this->dispatchBrowserEvent('unblockUI');
-            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => implode(" - ", $e->errorInfo)]);
-            return null;
-        } catch (\Exception $e2) {
-            $this->dispatchBrowserEvent('unblockUI');
-            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => $e2->getMessage()]);
-            return null;
-        }
-
-        //Đẩy thông tin về trình duyệt
-        $this->dispatchBrowserEvent('dt_draw');
-        $toastr_message = $this->toastr_message;
-        $this->cancel();
-        $this->dispatchBrowserEvent('toastr', ['type' => 'success', 'title' => "Thành công", 'message' => $toastr_message]);
     }
 }
