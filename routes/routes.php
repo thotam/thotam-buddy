@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Thotam\ThotamBuddy\Http\Controllers\BuddyCaNhanController;
+use Thotam\ThotamBuddy\Http\Controllers\BuddyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,8 +20,8 @@ Route::middleware(['web', 'auth', 'CheckAccount', 'CheckHr'])->group(function ()
     Route::redirect('buddy', '/', 301);
     Route::group(['prefix' => 'buddy'], function () {
 
-        //Route quản lý người dùng
-        Route::get('canhan',  [BuddyCaNhanController::class, 'index'])->name('buddy.canhan');
+        Route::get('canhan',  [BuddyController::class, 'canhan'])->name('buddy.canhan');
+        Route::get('nhom',  [BuddyController::class, 'nhom'])->name('buddy.nhom');
 
     });
 

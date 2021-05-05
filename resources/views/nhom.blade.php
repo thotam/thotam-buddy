@@ -12,17 +12,16 @@
     <script src="{{ mix('/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
 @endsection
 
-@push('datatables')
-    <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
-    {{$dataTable->scripts()}}
-@endpush
-
 @section('content')
     <h4 class="font-weight-bold py-3 mb-4">{{ $title }}</h4>
 
     <div class="card">
 
+        @livewire('thotam-buddy::buddy-nhom-livewire')
 
+        <div class="px-4 mb-4">
+            @livewire('thotam-buddy::buddy-nhom-datatable')
+        </div>
     </div>
 
 @endsection

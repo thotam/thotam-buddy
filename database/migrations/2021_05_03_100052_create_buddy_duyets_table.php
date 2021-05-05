@@ -16,6 +16,7 @@ class CreateBuddyDuyetsTable extends Migration
         Schema::create('buddy_duyets', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('buddy_id')->unsigned()->nullable()->default(null);
+            $table->bigInteger('ketqua')->unsigned()->nullable()->default(null);
             $table->longText('ghichu')->nullable()->default(null);
             $table->string('hr_key')->nullable()->default(null);
             $table->boolean('active')->nullable()->default(null);
@@ -26,6 +27,7 @@ class CreateBuddyDuyetsTable extends Migration
             $table->softDeletes();
             $table->foreign('hr_key')->references('key')->on('hrs')->onDelete('SET NULL')->onUpdate('cascade');
             $table->foreign('buddy_id')->references('id')->on('buddies')->onDelete('SET NULL')->onUpdate('cascade');
+            $table->foreign('ketqua')->references('id')->on('buddy_trangthais')->onDelete('SET NULL')->onUpdate('cascade');
         });
     }
 

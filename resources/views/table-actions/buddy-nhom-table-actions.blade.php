@@ -6,11 +6,13 @@
         <div class='col action-icon-w-50'></div>
     @endif
 
-    @if (($trangthai_id == 9 || $trangthai_id == 11) && $nguoihuongdan_of_buddy_ids->contains($id))
-        <div class='col action-icon-w-50 action-icon' thotam-livewire-method='len_tieuchi_buddy' thotam-model-id='{{ $id }}'><i class='text-orange fas fa-bullseye'></i></div>
+    @if ($trangthai_id == 5 || $trangthai_id == 7 || $trangthai_id == 9)
+        <div class='col action-icon-w-50 action-icon' thotam-livewire-method='duyet_buddy' thotam-model-id='{{ $id }}'><i class='text-success fas fa-check-double'></i></div>
     @else
         <div class='col action-icon-w-50'></div>
     @endif
+
+    <div class='col action-icon-w-50 action-icon' thotam-livewire-method='set_team_hr' thotam-model-id='{{ $id }}'><i class='text-success fas fa-users'></i></div>
 
     @if ($trangthai_id == 5)
         <div class='col action-icon-w-50 action-icon' thotam-livewire-method='delete_buddy' thotam-model-id='{{ $id }}'><i class='text-danger fas fa-trash-alt'></i></div>

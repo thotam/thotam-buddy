@@ -8,6 +8,7 @@ use Thotam\ThotamHr\Models\HR;
 use Thotam\ThotamTeam\Models\Nhom;
 use Thotam\ThotamBuddy\Models\Buddy;
 use Thotam\ThotamBuddy\Traits\BuddyTraits;
+use Thotam\ThotamBuddy\Models\BuddyTieuChi;
 
 class BuddyCaNhanLivewire extends Component
 {
@@ -26,7 +27,7 @@ class BuddyCaNhanLivewire extends Component
      *
      * @var array
      */
-    protected $listeners = ['dynamic_update_method', 'add_buddy', 'edit_buddy', 'delete_buddy'];
+    protected $listeners = ['dynamic_update_method', 'add_buddy', 'edit_buddy', 'delete_buddy', 'len_tieuchi_buddy'];
 
     /**
      * Validation rules
@@ -41,6 +42,11 @@ class BuddyCaNhanLivewire extends Component
             'quanly_email' => 'required|email',
             'nhucau' => 'required|string',
             'ghichu' => 'nullable|string',
+            'tentieuchi' => 'required|string',
+            'noidung' => 'required|string',
+            'ketqua_candat' => 'required|string',
+            'deadline' => 'required|date_format:d-m-Y',
+            'len_tieuchi_ghichu' => 'nullable|string',
         ];
     }
 
@@ -56,6 +62,11 @@ class BuddyCaNhanLivewire extends Component
         'quanly_email' => 'email quản lý của bạn',
         'nhucau' => 'nhu cầu đào tạo',
         'ghichu' => 'ghi chú',
+        'tentieuchi' => 'tên tiêu chí',
+        'noidung' => 'nội dung',
+        'ketqua_candat' => 'kết quả cần đạt',
+        'deadline' => 'thời hạn thực hiện',
+        'len_tieuchi_ghichu' => 'ghi chú',
     ];
 
     /**
@@ -71,6 +82,11 @@ class BuddyCaNhanLivewire extends Component
         $this->addStatus = false;
         $this->editStatus = false;
         $this->viewStatus = false;
+        $this->deleteStatus = false;
+        $this->lenTieuChiStatus = false;
+        $this->addTieuChiStatus = false;
+        $this->deleteTieuChiStatus = false;
+        $this->editTieuChiStatus = false;
         $this->resetValidation();
         $this->emitTo('thotam-buddy::buddy-canhan-datatable', 'refreshComponent');
         $this->mount();
@@ -89,6 +105,7 @@ class BuddyCaNhanLivewire extends Component
     public function mount()
     {
         $this->hr = Auth::user()->hr;
+        $this->quanly_of_nhomids = $this->hr->quanly_of_nhoms->pluck('id');
     }
 
     /**

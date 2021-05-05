@@ -11,39 +11,35 @@ use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\TimeColumn;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
-use Illuminate\Database\Eloquent\Builder;
 
-class BuddyCaNhanTable extends LivewireDatatable
+class BuddyNhomTable extends LivewireDatatable
 {
     public $exportable = true;
     public $model = Buddy::class;
-    public $hr, $nguoihuongdan_of_buddy_ids;
+    public $hr;
 
     public function __construct()
     {
         $this->hr = Auth::user()->hr;
         $this->listeners['refreshComponent'] = '$refresh';
-        $this->nguoihuongdan_of_buddy_ids = $this->hr->nguoihuongdan_of_buddy_ids;
     }
 
     public function builder()
     {
-        return $this->model::query()->where('buddies.active', true)->where(function(Builder $query) {
-            $query->where('buddies.hr_key', $this->hr->key)
-                  ->orWhereHas('nguoihuongdans', function (Builder $query2) {
-                        $query2->where('buddy_nguoihuongdans.hr_key', $this->hr->key);
-                    });
-        })->with(['hr', 'nhom']);
+        $builder = $this->model::query()->where('buddies.active', true);
 
-        //return $this->model::query()->where('buddies.active', true)->where('buddies.hr_key', $this->hr->key)->with(['hr', 'nhom']);
+        if (!$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"]) && !$this->hr->hasAnyPermission(["view-buddy"])) {
+            $builder->whereIn('buddies.nhom_id', $this->quanlynhomids);
+        }
+
+        return $builder->with(['hr', 'nhom']);
     }
 
     public function columns()
     {
         return [
-
             Column::callback(['id', 'trangthai_id'], function ($id, $trangthai_id) {
-                return view('thotam-buddy::table-actions.buddy-canhan-table-actions', ['id' => $id, 'trangthai_id' => $trangthai_id, 'nguoihuongdan_of_buddy_ids' => $this->nguoihuongdan_of_buddy_ids]);
+                return view('thotam-buddy::table-actions.buddy-nhom-table-actions', ['id' => $id, 'trangthai_id' => $trangthai_id]);
             })->label("Action"),
 
             Column::name('buddy_code')->label("Mã Buddy")->filterable()->searchable(),
@@ -72,6 +68,13 @@ class BuddyCaNhanTable extends LivewireDatatable
         $nhom_arrays = $nhom_arrays->merge($this->hr->thanhvien_of_nhoms);
 
         return $nhom_arrays->pluck("full_name");
+    }
+
+    public function getQuanlynhomidsProperty()
+    {
+        $nhom_arrays = $this->hr->quanly_of_nhoms;
+
+        return $nhom_arrays->pluck("id");
     }
 
     public function getTrangthaisProperty()

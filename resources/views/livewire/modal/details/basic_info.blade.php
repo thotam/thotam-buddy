@@ -1,4 +1,13 @@
-<div class="col-md-4 col-12">
+<div class="col-md-3 col-6">
+    <div class="form-group">
+        <label class="col-form-label">Mã Buddy:</label>
+        <div>
+            <span type="text" class="form-control px-2 h-auto">{{ $buddy->buddy_code }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3 col-6">
     <div class="form-group">
         <label class="col-form-label">Mã nhân sự:</label>
         <div>
@@ -7,7 +16,7 @@
     </div>
 </div>
 
-<div class="col-md-8 col-12">
+<div class="col-md-6 col-12">
     <div class="form-group">
         <label class="col-form-label">Họ và tên:</label>
         <div>
@@ -56,7 +65,7 @@
 
 <div class="col-md-6 col-12">
     <div class="form-group">
-        <label class="col-form-label">Thòi gian đăng ký:</label>
+        <label class="col-form-label">Thời gian đăng ký:</label>
         <div>
             <pre class="form-control px-2 h-auto thotam-pre">{{ $buddy->created_at->format("d-m-Y H:i:s") }}</pre>
         </div>

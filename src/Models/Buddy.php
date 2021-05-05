@@ -6,10 +6,14 @@ use Thotam\ThotamHr\Models\HR;
 use Thotam\ThotamTeam\Models\Nhom;
 use Wildside\Userstamps\Userstamps;
 use Illuminate\Database\Eloquent\Model;
+use Thotam\ThotamBuddy\Models\BuddyDuyet;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Thotam\ThotamBuddy\Models\BuddyTrangThai;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Buddy extends Model
 {
@@ -30,6 +34,15 @@ class Buddy extends Model
      * @var string
      */
     protected $table = 'buddies';
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'ngayvaolam' => 'datetime',
+    ];
 
     /**
      * Get the hr that owns the Buddy
@@ -59,5 +72,35 @@ class Buddy extends Model
     public function trangthai(): BelongsTo
     {
         return $this->belongsTo(BuddyTrangThai::class, 'trangthai_id', 'id');
+    }
+
+    /**
+     * Get the buddy_duyet associated with the Buddy
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function buddy_duyet(): HasOne
+    {
+        return $this->hasOne(BuddyDuyet::class, 'buddy_id', 'id');
+    }
+
+    /**
+     * The nguoihuongdans that belong to the Buddy
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function nguoihuongdans(): BelongsToMany
+    {
+        return $this->belongsToMany(HR::class, 'buddy_nguoihuongdans', 'buddy_id', 'hr_key');
+    }
+
+    /**
+     * Get all of the buddy_tieuchies for the Buddy
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function buddy_tieuchies(): HasMany
+    {
+        return $this->hasMany(BuddyTieuChi::class, 'buddy_id', 'id');
     }
 }
