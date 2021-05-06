@@ -2,10 +2,12 @@
 
 namespace Thotam\ThotamBuddy\Traits;
 
+use Illuminate\Support\Str;
 use Thotam\ThotamHr\Models\HR;
 use Thotam\ThotamTeam\Models\Nhom;
 use Thotam\ThotamBuddy\Models\Buddy;
 use Thotam\ThotamBuddy\Models\BuddyTieuChi;
+use Thotam\ThotamBuddy\Models\BuddyTieuChiDuyet;
 use Thotam\ThotamPlus\Traits\ThoTamRandomCodeTrait;
 
 trait BuddyTraits
@@ -22,7 +24,7 @@ trait BuddyTraits
     public $hr;
     public $modal_title, $toastr_message;
     public $quanly_of_nhomids;
-    public $tentieuchi, $noidung, $ketqua_candat, $len_tieuchi_ghichu, $deadline;
+    public $tentieuchi, $noidung, $ketqua_candat, $len_tieuchi_ghichu, $deadline, $duyet_tieuchi_ghichu;
     public $buddy_tieuchies, $buddy_tieuchi, $buddy_tieuchi_id;
 
     public $lenTieuChiStatus = false;
@@ -279,14 +281,20 @@ trait BuddyTraits
     {
         $this->buddy = $buddy;
 
-        if (!$this->hr->nguoihuongdan_of_buddies->contains($this->buddy)) {
-            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Bạn không phải là người hướng dẫn của Buddy này"]);
+        if ((!$this->hr->nguoihuongdan_of_buddies->contains($this->buddy)) && (!$this->quanly_of_nhomids->contains($this->buddy->nhom_id)) && (!$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"]))) {
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Bạn không phải là Quản lý, Admin hoặc là người hướng dẫn của Buddy này"]);
             $this->cancel();
             return null;
         }
 
-        if ($this->buddy->trangthai_id !== 9 && $this->buddy->trangthai_id !== 11) {
+        if (($this->buddy->trangthai_id !== 9 && $this->buddy->trangthai_id !== 11 && Str::contains(get_class($this), 'BuddyCaNhanLivewire'))) {
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể lên tiêu chí"]);
+            $this->cancel();
+            return null;
+        }
+
+        if (($this->buddy->trangthai_id !== 13 && Str::contains(get_class($this), 'BuddyNhomLivewire'))) {
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể duyệt tiêu chí"]);
             $this->cancel();
             return null;
         }
@@ -356,15 +364,21 @@ trait BuddyTraits
      */
     public function add_tieuchi_buddy_save()
     {
-        if (!$this->hr->nguoihuongdan_of_buddies->contains($this->buddy)) {
+        if ((!$this->hr->nguoihuongdan_of_buddies->contains($this->buddy)) && (!$this->quanly_of_nhomids->contains($this->buddy->nhom_id)) && (!$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"]))) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Bạn không phải là người hướng dẫn của Buddy này"]);
             return null;
         }
 
-        if ($this->buddy->trangthai_id !== 9 && $this->buddy->trangthai_id !== 11) {
+        if (($this->buddy->trangthai_id !== 9 && $this->buddy->trangthai_id !== 11 && Str::contains(get_class($this), 'BuddyCaNhanLivewire'))) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể lên tiêu chí"]);
+            return null;
+        }
+
+        if (($this->buddy->trangthai_id !== 13 && Str::contains(get_class($this), 'BuddyNhomLivewire'))) {
+            $this->dispatchBrowserEvent('unblockUI');
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể chỉnh sửa tiêu chí"]);
             return null;
         }
 
@@ -452,13 +466,19 @@ trait BuddyTraits
      */
     public function delete_tieuchi_buddy_action()
     {
-        if (!$this->hr->nguoihuongdan_of_buddies->contains($this->buddy)) {
+        if ((!$this->hr->nguoihuongdan_of_buddies->contains($this->buddy)) && (!$this->quanly_of_nhomids->contains($this->buddy->nhom_id)) && (!$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"]))) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Bạn không phải là người hướng dẫn của Buddy này"]);
             return null;
         }
 
-        if ($this->buddy->trangthai_id !== 9 && $this->buddy->trangthai_id !== 11) {
+        if (($this->buddy->trangthai_id !== 9 && $this->buddy->trangthai_id !== 11 && Str::contains(get_class($this), 'BuddyCaNhanLivewire'))) {
+            $this->dispatchBrowserEvent('unblockUI');
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể xóa tiêu chí"]);
+            return null;
+        }
+
+        if (($this->buddy->trangthai_id !== 13 && Str::contains(get_class($this), 'BuddyNhomLivewire'))) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể xóa tiêu chí"]);
             return null;
@@ -573,4 +593,27 @@ trait BuddyTraits
         $this->dispatchBrowserEvent('unblockUI');
         $this->dispatchBrowserEvent('dynamic_update');
     }
+
+    /**
+     * view_buddy
+     *
+     * @param  mixed $buddy
+     * @return void
+     */
+    public function view_buddy(Buddy $buddy)
+    {
+
+        $this->buddy = $buddy;
+
+        $this->buddy_tieuchies = Buddy::find($this->buddy->id)->buddy_tieuchies;
+        
+        $this->viewStatus = true;
+        $this->modal_title = "Thông tin chi tiết Buddy";
+        $this->toastr_message = "Thông tin chi tiết Buddy thành công";
+
+        $this->dispatchBrowserEvent('unblockUI');
+        $this->dispatchBrowserEvent('dynamic_update');
+        $this->dispatchBrowserEvent('show_modal', "#view_buddy_modal");
+    }
+
 }

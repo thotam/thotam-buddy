@@ -11,7 +11,7 @@
                         <label class="col-form-label text-orange">
                             Tiêu chí {{ $loop->index + 1}}:
 
-                            @if ($lenTieuChiStatus && ($buddy->trangthai_id == 9 || $buddy->trangthai_id == 11))
+                            @if (($lenTieuChiStatus && ($buddy->trangthai_id == 9 || $buddy->trangthai_id == 11)) || (Str::contains(get_class($this), 'BuddyNhomLivewire') && ($buddy->trangthai_id == 13)))
                                 <i wire:key="edit_{{ $loop->index }}" thotam-blockui wire:click.prevent="edit_tieuchi_buddy({{ $buddy_tieuchi->id }})" class='action-icon text-twitter fas fa-edit ml-3'></i>
                                 <i wire:key="trash_{{ $loop->index }}" thotam-blockui wire:click.prevent="delete_tieuchi_buddy({{ $buddy_tieuchi->id }})" class='action-icon text-danger fas fa-trash-alt ml-3'></i>
                             @endif
@@ -84,3 +84,65 @@
         @endif
     </div>
 </div>
+
+@if (!!$buddy->buddy_tieuchi_duyet)
+    <div class="col-12">
+        <div class="form-group mb-1 mt-1 text-orange">
+            <b>Thông tin duyệt tiêu chí:</b>
+        </div>
+
+        <div class="row px-3">
+            
+            <div class="col-md-12 col-12">
+                <div class="form-group">
+                    <label class="col-form-label">Người duyệt:</label>
+                    <div>
+                        <pre class="form-control px-2 h-auto thotam-pre">{{ $buddy_tieuchi->hr->hoten }}</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-12">
+                <div class="form-group">
+                    <label class="col-form-label">Thời gian duyệt:</label>
+                    <div>
+                        <pre class="form-control px-2 h-auto thotam-pre">{{ $buddy->buddy_tieuchi_duyet->created_at->format("d-m-Y H:i:s") }}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-12">
+                <div class="form-group">
+                    <label class="col-form-label">Kết quả duyệt:</label>
+                    <div>
+                        <span class="form-control px-2 h-auto">
+                            @switch($buddy->buddy_tieuchi_duyet->ketqua)
+                                @case(19)
+                                    Đã duyệt
+                                    @break
+                                @case(15)
+                                    Không duyệt
+                                    @break
+                                @default
+                                    Không có thông tin
+                            @endswitch
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            @if (!!$buddy->buddy_tieuchi_duyet->ghichu )
+                <div class="col-md-12 col-12">
+                    <div class="form-group">
+                        <label class="col-form-label">Ghi chú:</label>
+                        <div>
+                            <pre class="form-control px-2 h-auto thotam-pre">{{ $buddy->buddy_tieuchi_duyet->ghichu }}</pre>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+        </div>
+
+    </div>
+@endif

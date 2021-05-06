@@ -27,7 +27,7 @@ class BuddyCaNhanLivewire extends Component
      *
      * @var array
      */
-    protected $listeners = ['dynamic_update_method', 'add_buddy', 'edit_buddy', 'delete_buddy', 'len_tieuchi_buddy'];
+    protected $listeners = ['dynamic_update_method', 'add_buddy', 'edit_buddy', 'delete_buddy', 'len_tieuchi_buddy', 'view_buddy'];
 
     /**
      * Validation rules

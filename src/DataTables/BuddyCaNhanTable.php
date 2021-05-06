@@ -42,8 +42,8 @@ class BuddyCaNhanTable extends LivewireDatatable
     {
         return [
 
-            Column::callback(['id', 'trangthai_id'], function ($id, $trangthai_id) {
-                return view('thotam-buddy::table-actions.buddy-canhan-table-actions', ['id' => $id, 'trangthai_id' => $trangthai_id, 'nguoihuongdan_of_buddy_ids' => $this->nguoihuongdan_of_buddy_ids]);
+            Column::callback(['id', 'trangthai_id', 'hr_key'], function ($id, $trangthai_id, $hr_key) {
+                return view('thotam-buddy::table-actions.buddy-canhan-table-actions', ['id' => $id, 'trangthai_id' => $trangthai_id, 'nguoihuongdan_of_buddy_ids' => $this->nguoihuongdan_of_buddy_ids, 'isMine' => $this->hr->key == $hr_key]);
             })->label("Action"),
 
             Column::name('buddy_code')->label("Mã Buddy")->filterable()->searchable(),

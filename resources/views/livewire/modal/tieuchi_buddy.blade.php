@@ -20,6 +20,21 @@
                                 @include('thotam-buddy::livewire.modal.details.duyet_info')
 
                                 @include('thotam-buddy::livewire.modal.details.tieuchi_info')
+
+                                @if ($buddy->trangthai_id == 13 && Str::contains(get_class($this), 'BuddyNhomLivewire'))
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label text-indigo" for="duyet_tieuchi_ghichu">Ghi chú:</label>
+                                        <div>
+                                            <textarea class="form-control px-2" id="duyet_tieuchi_ghichu" wire:model.lazy="duyet_tieuchi_ghichu" placeholder="Các thông tin khác của người duyệt nếu có ..." autocomplete="off" style="width: 100%"></textarea>
+                                        </div>
+                                        @error('duyet_tieuchi_ghichu')
+                                            <label class="pl-1 small invalid-feedback d-inline-block" ><i class="fas mr-1 fa-exclamation-circle"></i>{{ $message }}</label>
+                                        @enderror
+                                    </div>
+                                </div>
+                                @endif
+
                             </div>
                         </form>
                     </div>
@@ -27,9 +42,14 @@
 
                 <div class="modal-footer mx-auto">
                     <button wire:click.prevent="cancel()" thotam-blockui class="btn btn-danger" wire:loading.attr="disabled" data-dismiss="modal">Đóng</button>
-                    @if ($buddy->trangthai_id == 9 || $buddy->trangthai_id == 11)
+                    @if (($buddy->trangthai_id == 9 || $buddy->trangthai_id == 11) && Str::contains(get_class($this), 'BuddyCaNhanLivewire'))
                         <button wire:click.prevent="lock_tieuchi_buddy()" thotam-blockui class="btn btn-success" wire:loading.attr="disabled">Chốt</button>
                         <button wire:click.prevent="add_tieuchi_buddy()" thotam-blockui class="btn btn-info" wire:loading.attr="disabled">Thêm</button>
+                    @endif
+
+                    @if ($buddy->trangthai_id == 13 && Str::contains(get_class($this), 'BuddyNhomLivewire'))
+                        <button wire:click.prevent="duyet_tieuchi_buddy(15)" thotam-blockui class="btn btn-warning" wire:loading.attr="disabled">Không duyệt</button>
+                        <button wire:click.prevent="duyet_tieuchi_buddy(19)" thotam-blockui class="btn btn-success" wire:loading.attr="disabled">Duyệt</button>
                     @endif
                 </div>
             @endif

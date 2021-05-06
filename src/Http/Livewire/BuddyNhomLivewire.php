@@ -9,6 +9,7 @@ use Thotam\ThotamTeam\Models\Nhom;
 use Thotam\ThotamBuddy\Models\Buddy;
 use Thotam\ThotamBuddy\Models\BuddyDuyet;
 use Thotam\ThotamBuddy\Traits\BuddyTraits;
+use Thotam\ThotamBuddy\Models\BuddyTieuChiDuyet;
 
 class BuddyNhomLivewire extends Component
 {
@@ -32,7 +33,7 @@ class BuddyNhomLivewire extends Component
      *
      * @var array
      */
-    protected $listeners = ['dynamic_update_method', 'edit_buddy', 'delete_buddy', 'duyet_buddy'];
+    protected $listeners = ['dynamic_update_method', 'edit_buddy', 'delete_buddy', 'duyet_buddy', 'len_tieuchi_buddy', 'view_buddy'];
 
     /**
      * Validation rules
@@ -52,6 +53,12 @@ class BuddyNhomLivewire extends Component
             'nguoihuongdan.*' => 'required|exists:hrs,key',
             'duyet_ketqua' => 'required|in:7,9',
             'duyet_ghichu' => 'nullable|string',
+            'duyet_tieuchi_ghichu' => 'nullable|string',
+            'tentieuchi' => 'required|string',
+            'noidung' => 'required|string',
+            'ketqua_candat' => 'required|string',
+            'deadline' => 'required|date_format:d-m-Y',
+            'len_tieuchi_ghichu' => 'nullable|string',
         ];
     }
 
@@ -72,6 +79,12 @@ class BuddyNhomLivewire extends Component
         'nguoihuongdan.*' => 'người hướng dẫn',
         'duyet_ketqua' => 'kết quả duyệt',
         'duyet_ghichu' => 'ghi chú',
+        'duyet_tieuchi_ghichu' => 'ghi chú',
+        'tentieuchi' => 'tên tiêu chí',
+        'noidung' => 'nội dung',
+        'ketqua_candat' => 'kết quả cần đạt',
+        'deadline' => 'thời hạn thực hiện',
+        'len_tieuchi_ghichu' => 'ghi chú',
     ];
 
     /**
@@ -229,5 +242,71 @@ class BuddyNhomLivewire extends Component
         $toastr_message = $this->toastr_message;
         $this->cancel();
         $this->dispatchBrowserEvent('toastr', ['type' => 'success', 'title' => "Thành công", 'message' => $toastr_message]);
+    }
+    
+    /**
+     * duyet_tieuchi_buddy
+     *
+     * @param  mixed $ketqua
+     * @return void
+     */
+    public function duyet_tieuchi_buddy(int $ketqua)
+    {
+        if (!$this->quanly_of_nhomids->contains($this->buddy->nhom_id) && !$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"])) {
+            $this->dispatchBrowserEvent('unblockUI');
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Bạn không có quyền duyệt tiêu chí của Buddy này"]);
+            return null;
+        }
+
+        $this->buddy_tieuchies = Buddy::find($this->buddy->id)->buddy_tieuchies;
+
+        if (count($this->buddy_tieuchies) == 0) {
+            $this->dispatchBrowserEvent('unblockUI');
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này chưa có tiêu chí nào"]);
+            return null;
+        }
+
+        if ($ketqua != 15 && $ketqua != 19) {
+            $this->dispatchBrowserEvent('unblockUI');
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Kết quả duyệt không hợp lệ"]);
+            return null;
+        }
+
+        $this->dispatchBrowserEvent('unblockUI');
+        $this->validate([
+            'duyet_tieuchi_ghichu' => 'nullable|string',
+        ]);
+        $this->dispatchBrowserEvent('blockUI');
+
+        try {
+            $BuddyTieuChiDuyet = BuddyTieuChiDuyet::create(
+                [
+                    "ketqua" => $ketqua,
+                    "hr_key" => $this->hr->key,
+                    "active" => true,
+                    "ghichu" => $this->duyet_tieuchi_ghichu,
+                ]
+            );
+
+            $this->buddy->buddy_tieuchi_duyet()->delete();
+
+            $this->buddy->buddy_tieuchi_duyet()->save($BuddyTieuChiDuyet);
+
+            $this->buddy->update([
+                "trangthai_id" => $ketqua,
+            ]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            $this->dispatchBrowserEvent('unblockUI');
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => implode(" - ", $e->errorInfo)]);
+            return null;
+        } catch (\Exception $e2) {
+            $this->dispatchBrowserEvent('unblockUI');
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => $e2->getMessage()]);
+            return null;
+        }
+
+        //Đẩy thông tin về trình duyệt
+        $this->cancel();
+        $this->dispatchBrowserEvent('toastr', ['type' => 'success', 'title' => "Thành công", 'message' => "Duyệt tiêu chí thành công"]);
     }
 }

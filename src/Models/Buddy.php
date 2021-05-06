@@ -7,13 +7,15 @@ use Thotam\ThotamTeam\Models\Nhom;
 use Wildside\Userstamps\Userstamps;
 use Illuminate\Database\Eloquent\Model;
 use Thotam\ThotamBuddy\Models\BuddyDuyet;
+use Thotam\ThotamBuddy\Models\BuddyTieuChi;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Thotam\ThotamBuddy\Models\BuddyTrangThai;
+use Thotam\ThotamBuddy\Models\BuddyTieuChiDuyet;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Buddy extends Model
 {
@@ -102,5 +104,15 @@ class Buddy extends Model
     public function buddy_tieuchies(): HasMany
     {
         return $this->hasMany(BuddyTieuChi::class, 'buddy_id', 'id');
+    }
+
+    /**
+     * Get all of the buddy_tieuchi_duyet for the Buddy
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function buddy_tieuchi_duyet(): HasOne
+    {
+        return $this->hasOne(BuddyTieuChiDuyet::class, 'buddy_id', 'id');
     }
 }

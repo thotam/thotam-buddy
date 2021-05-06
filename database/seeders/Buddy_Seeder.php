@@ -92,7 +92,7 @@ class Buddy_Seeder extends Seeder
         BuddyTrangThai::updateOrCreate(
             ['id' => 21],
             [
-                'trangthai' => "Đã báo cáo",
+                'trangthai' => "Đang báo cáo",
                 'active' => true
             ]
         );

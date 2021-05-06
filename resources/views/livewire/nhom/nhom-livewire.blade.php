@@ -6,6 +6,8 @@
     @include('thotam-buddy::livewire.modal.add_edit_buddy')
     @include('thotam-buddy::livewire.modal.delete_buddy')
     @include('thotam-buddy::livewire.modal.duyet_buddy')
+    @include('thotam-buddy::livewire.modal.tieuchi_buddy')
+    @include('thotam-buddy::livewire.modal.view_buddy')
 
     <!-- Scripts -->
     @push('livewires')
