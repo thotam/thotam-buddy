@@ -8,6 +8,7 @@
     @include('thotam-buddy::livewire.modal.duyet_buddy')
     @include('thotam-buddy::livewire.modal.tieuchi_buddy')
     @include('thotam-buddy::livewire.modal.view_buddy')
+    @include('thotam-buddy::livewire.modal.danhgia_buddy')
 
     <!-- Scripts -->
     @push('livewires')

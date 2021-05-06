@@ -9,6 +9,7 @@ use Thotam\ThotamTeam\Models\Nhom;
 use Thotam\ThotamBuddy\Models\Buddy;
 use Thotam\ThotamBuddy\Models\BuddyDuyet;
 use Thotam\ThotamBuddy\Traits\BuddyTraits;
+use Thotam\ThotamBuddy\Models\BuddyDanhGia;
 use Thotam\ThotamBuddy\Models\BuddyTieuChiDuyet;
 
 class BuddyNhomLivewire extends Component
@@ -18,6 +19,7 @@ class BuddyNhomLivewire extends Component
     public $ngayvaolam, $nguoihuongdan, $duyet_ketqua, $duyet_ghichu;
     public $nguoihuongdan_arrays = [];
     public $buddy_duyet;
+    public $danhgia_ketqua, $danhgia_thuongtien, $danhgia_noidung, $danhgia_ghichu;
 
     /**
      * @var bool
@@ -27,13 +29,14 @@ class BuddyNhomLivewire extends Component
     public $editStatus = false;
     public $deleteStatus = false;
     public $duyetStatus = false;
+    public $danhgiaStatus = false;
 
     /**
      * Các biển sự kiện
      *
      * @var array
      */
-    protected $listeners = ['dynamic_update_method', 'edit_buddy', 'delete_buddy', 'duyet_buddy', 'len_tieuchi_buddy', 'view_buddy'];
+    protected $listeners = ['dynamic_update_method', 'edit_buddy', 'delete_buddy', 'duyet_buddy', 'len_tieuchi_buddy', 'view_buddy', 'danhgia_buddy'];
 
     /**
      * Validation rules
@@ -59,6 +62,10 @@ class BuddyNhomLivewire extends Component
             'ketqua_candat' => 'required|string',
             'deadline' => 'required|date_format:d-m-Y',
             'len_tieuchi_ghichu' => 'nullable|string',
+            'danhgia_ketqua' => 'required|in:25,27',
+            'danhgia_thuongtien' => 'required|in:1,0',
+            'danhgia_noidung' => 'required|string',
+            'danhgia_ghichu' => 'nullable|string',
         ];
     }
 
@@ -85,6 +92,10 @@ class BuddyNhomLivewire extends Component
         'ketqua_candat' => 'kết quả cần đạt',
         'deadline' => 'thời hạn thực hiện',
         'len_tieuchi_ghichu' => 'ghi chú',
+        'danhgia_ketqua' => 'kết quả đánh giá',
+        'danhgia_thuongtien' => 'thưởng tiền',
+        'danhgia_noidung' => 'nội dung đánh giá',
+        'danhgia_ghichu' => 'ghi chú',
     ];
 
     /**
@@ -108,6 +119,7 @@ class BuddyNhomLivewire extends Component
         $this->editTieuChiStatus = false;
         $this->baocaoStatus = false;
         $this->baoCaoTieuChiStatus = false;
+        $this->danhgiaStatus = false;
         $this->resetValidation();
         $this->emitTo('thotam-buddy::buddy-nhom-datatable', 'refreshComponent');
         $this->mount();
@@ -199,7 +211,7 @@ class BuddyNhomLivewire extends Component
 
         if ((!$this->quanly_of_nhomids->contains($this->buddy->nhom_id)) && (!$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"])) && (!$this->hr->hasAnyPermission(["duyet-buddy"]))) {
             $this->dispatchBrowserEvent('unblockUI');
-            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Chỉ người đăng ký, quản lý của người đăng ký hoặc Admin mới có quyền xóa Buddy này"]);
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Chỉ người đăng ký, quản lý của người đăng ký hoặc Admin mới có quyền duyệt Buddy này"]);
             return null;
         }
 
@@ -314,5 +326,95 @@ class BuddyNhomLivewire extends Component
         //Đẩy thông tin về trình duyệt
         $this->cancel();
         $this->dispatchBrowserEvent('toastr', ['type' => 'success', 'title' => "Thành công", 'message' => "Duyệt tiêu chí thành công"]);
+    }
+
+    /**
+     * danhgia_buddy
+     *
+     * @param  mixed $buddy
+     * @return void
+     */
+    public function danhgia_buddy(Buddy $buddy)
+    {
+        $this->buddy = $buddy;
+
+        if ($this->buddy->trangthai_id !== 23) {
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy đang ở trạng thái không thể đánh giá"]);
+            $this->cancel();
+            return null;
+        }
+
+        if ((!$this->quanly_of_nhomids->contains($this->buddy->nhom_id)) && (!$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"])) && (!$this->hr->hasAnyPermission(["danhgia-buddy"]))) {
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Chỉ người đăng ký, quản lý của người đăng ký hoặc Admin mới có quyền đánh giá Buddy này"]);
+            $this->cancel();
+            return null;
+        }
+
+        $this->buddy_tieuchies = Buddy::find($this->buddy->id)->buddy_tieuchies;
+
+        $this->danhgiaStatus = true;
+        $this->modal_title = "Đánh giá Buddy";
+        $this->toastr_message = "Đánh giá Buddy thành công";
+
+        $this->dispatchBrowserEvent('unblockUI');
+        $this->dispatchBrowserEvent('dynamic_update');
+        $this->dispatchBrowserEvent('show_modal', "#danhgia_buddy_modal");
+    }
+
+    public function save_danhgia_buddy()
+    {
+        if ($this->buddy->trangthai_id !== 23) {
+            $this->dispatchBrowserEvent('unblockUI');
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy đang ở trạng thái không thể đánh giá"]);
+            return null;
+        }
+
+        if ((!$this->quanly_of_nhomids->contains($this->buddy->nhom_id)) && (!$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"])) && (!$this->hr->hasAnyPermission(["danhgia-buddy"]))) {
+            $this->dispatchBrowserEvent('unblockUI');
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Chỉ người đăng ký, quản lý của người đăng ký hoặc Admin mới có quyền đánh giá Buddy này"]);
+            return null;
+        }
+
+        $this->dispatchBrowserEvent('unblockUI');
+        $this->validate([
+            'danhgia_ketqua' => 'required|in:25,27',
+            'danhgia_thuongtien' => 'required|in:1,0',
+            'danhgia_noidung' => 'required|string',
+            'danhgia_ghichu' => 'nullable|string',
+        ]);
+        $this->dispatchBrowserEvent('blockUI');
+
+        try {
+            $this->buddy->buddy_danhgia()->delete();
+
+            $this->buddy_danhgia = BuddyDanhGia::create([
+                "danhgia" => $this->danhgia_ketqua,
+                "thuongtien" => $this->danhgia_thuongtien,
+                "noidung" => $this->danhgia_noidung,
+                "hr_key" => $this->hr->key,
+                "active" => true,
+                "ghichu" => $this->danhgia_ghichu,
+            ]);
+
+            $this->buddy->buddy_danhgia()->save($this->buddy_danhgia);
+            
+            $this->buddy->update([
+                "trangthai_id" => $this->danhgia_ketqua,
+            ]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            $this->dispatchBrowserEvent('unblockUI');
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => implode(" - ", $e->errorInfo)]);
+            return null;
+        } catch (\Exception $e2) {
+            $this->dispatchBrowserEvent('unblockUI');
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => $e2->getMessage()]);
+            return null;
+        }
+
+        //Đẩy thông tin về trình duyệt
+        $this->dispatchBrowserEvent('dt_draw');
+        $toastr_message = $this->toastr_message;
+        $this->cancel();
+        $this->dispatchBrowserEvent('toastr', ['type' => 'success', 'title' => "Thành công", 'message' => $toastr_message]);
     }
 }

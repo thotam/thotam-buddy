@@ -305,8 +305,14 @@ trait BuddyTraits
         $this->buddy_tieuchies = $this->buddy->buddy_tieuchies;
 
         $this->lenTieuChiStatus = true;
-        $this->modal_title = "Xây dựng tiêu chí Buddy";
-        $this->toastr_message = "Xây dựng tiêu chí Buddy thành công";
+        if (Str::contains(get_class($this), 'BuddyNhomLivewire')) {
+            $this->modal_title = "Duyệt tiêu chí Buddy";
+            $this->toastr_message = "Duyệt tiêu chí Buddy thành công";
+        } else {
+            $this->modal_title = "Xây dựng tiêu chí Buddy";
+            $this->toastr_message = "Xây dựng tiêu chí Buddy thành công";
+        }
+
 
         $this->dispatchBrowserEvent('unblockUI');
         $this->dispatchBrowserEvent('dynamic_update');

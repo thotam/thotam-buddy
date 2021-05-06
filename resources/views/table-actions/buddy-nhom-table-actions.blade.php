@@ -20,6 +20,12 @@
         <div class='col action-icon-w-50'></div>
     @endif
 
+    @if ($trangthai_id == 23)
+        <div class='col action-icon-w-50 action-icon' thotam-livewire-method='danhgia_buddy' thotam-model-id='{{ $id }}'><i class='text-linux far fa-check-square'></i></div>
+    @else
+        <div class='col action-icon-w-50'></div>
+    @endif
+
     @if ($trangthai_id == 5)
         <div class='col action-icon-w-50 action-icon' thotam-livewire-method='delete_buddy' thotam-model-id='{{ $id }}'><i class='text-danger fas fa-trash-alt'></i></div>
     @else

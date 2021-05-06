@@ -18,10 +18,12 @@
                                 @include('thotam-buddy::livewire.modal.details.basic_info')
 
                                 @include('thotam-buddy::livewire.modal.details.duyet_info')
-
+                                
                                 @if (count($buddy_tieuchies) !== 0)
                                     @include('thotam-buddy::livewire.modal.details.tieuchi_info')
                                 @endif
+
+                                @include('thotam-buddy::livewire.modal.details.danhgia_info')
 
                             </div>
                         </form>

@@ -7,6 +7,7 @@ use Thotam\ThotamTeam\Models\Nhom;
 use Wildside\Userstamps\Userstamps;
 use Illuminate\Database\Eloquent\Model;
 use Thotam\ThotamBuddy\Models\BuddyDuyet;
+use Thotam\ThotamBuddy\Models\BuddyDanhGia;
 use Thotam\ThotamBuddy\Models\BuddyTieuChi;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Thotam\ThotamBuddy\Models\BuddyTrangThai;
@@ -114,5 +115,15 @@ class Buddy extends Model
     public function buddy_tieuchi_duyet(): HasOne
     {
         return $this->hasOne(BuddyTieuChiDuyet::class, 'buddy_id', 'id');
+    }
+
+    /**
+     * Get the buddy_danhgia associated with the Buddy
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function buddy_danhgia(): HasOne
+    {
+        return $this->hasOne(BuddyDanhGia::class, 'buddy_id', 'id');
     }
 }
