@@ -15,7 +15,7 @@
     @endif
 
     @if (($trangthai_id == 19 || $trangthai_id == 21) && $isMine)
-        <div class='col action-icon-w-50 action-icon' thotam-livewire-method='baocao_tieuchi_buddy' thotam-model-id='{{ $id }}'><i class='text-success fas fa-file-upload'></i></div>
+        <div class='col action-icon-w-50 action-icon' thotam-livewire-method='baocao_buddy' thotam-model-id='{{ $id }}'><i class='text-success fas fa-file-upload'></i></div>
     @else
         <div class='col action-icon-w-50'></div>
     @endif

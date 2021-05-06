@@ -32,6 +32,9 @@ trait BuddyTraits
     public $deleteTieuChiStatus = false;
     public $editTieuChiStatus = false;
     public $chotTieuChiStatus = false;
+    public $baoCaoTieuChiStatus = false;
+    public $baocaoStatus = false;
+    public $doneTieuChiStatus = false;
 
     /**
      * dynamic_update_method
@@ -403,10 +406,9 @@ trait BuddyTraits
                     "ketqua_candat" => $this->ketqua_candat,
                     "ghichu" => $this->len_tieuchi_ghichu,
                     "deadline" => $this->deadline,
-                    "hr_key" => $this->hr->key,
                     "active" => true,
                 ]
-        );
+            );
 
             if (!!!$this->buddy_tieuchi->hr_key) {
                 $this->buddy_tieuchi->update([
@@ -606,7 +608,7 @@ trait BuddyTraits
         $this->buddy = $buddy;
 
         $this->buddy_tieuchies = Buddy::find($this->buddy->id)->buddy_tieuchies;
-        
+
         $this->viewStatus = true;
         $this->modal_title = "Thông tin chi tiết Buddy";
         $this->toastr_message = "Thông tin chi tiết Buddy thành công";

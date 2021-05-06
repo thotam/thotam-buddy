@@ -7,6 +7,7 @@
     @include('thotam-buddy::livewire.modal.delete_buddy')
     @include('thotam-buddy::livewire.modal.tieuchi_buddy')
     @include('thotam-buddy::livewire.modal.view_buddy')
+    @include('thotam-buddy::livewire.modal.baocao_buddy')
 
     <!-- Scripts -->
     @push('livewires')

@@ -6,12 +6,10 @@ use Thotam\ThotamHr\Models\HR;
 use Wildside\Userstamps\Userstamps;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Thotam\ThotamBuddy\Models\BuddyTieuChiBaoCao;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class BuddyTieuChi extends Model
+class BuddyTieuChiBaoCao extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -29,8 +27,7 @@ class BuddyTieuChi extends Model
      *
      * @var string
      */
-    protected $table = 'buddy_tieuchis';
-
+    protected $table = 'buddy_tieuchi_baocaos';
 
     /**
      * The attributes that should be cast to native types.
@@ -38,7 +35,7 @@ class BuddyTieuChi extends Model
      * @var array
      */
     protected $casts = [
-        'deadline' => 'datetime',
+        'thoigian' => 'datetime',
     ];
 
     /**
@@ -49,15 +46,5 @@ class BuddyTieuChi extends Model
     public function hr(): BelongsTo
     {
         return $this->belongsTo(HR::class, 'hr_key', 'key');
-    }
-
-    /**
-     * Get all of the baocaos for the BuddyTieuChi
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function baocaos(): HasMany
-    {
-        return $this->hasMany(BuddyTieuChiBaoCao::class, 'tieuchi_id', 'id');
     }
 }

@@ -102,6 +102,12 @@ class BuddyNhomLivewire extends Component
         $this->viewStatus = false;
         $this->deleteStatus = false;
         $this->duyetStatus = false;
+        $this->lenTieuChiStatus = false;
+        $this->addTieuChiStatus = false;
+        $this->deleteTieuChiStatus = false;
+        $this->editTieuChiStatus = false;
+        $this->baocaoStatus = false;
+        $this->baoCaoTieuChiStatus = false;
         $this->resetValidation();
         $this->emitTo('thotam-buddy::buddy-nhom-datatable', 'refreshComponent');
         $this->mount();

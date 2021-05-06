@@ -22,6 +22,7 @@ class CreateBuddyTieuchisTable extends Migration
             $table->longText('ghichu')->nullable()->default(null);
             $table->timestamp('deadline')->nullable();
             $table->string('hr_key')->nullable()->default(null);
+            $table->boolean('lock')->nullable()->default(null);
             $table->boolean('active')->nullable()->default(null);
             $table->unsignedBigInteger('created_by')->nullable()->default(null);
             $table->unsignedBigInteger('updated_by')->nullable()->default(null);

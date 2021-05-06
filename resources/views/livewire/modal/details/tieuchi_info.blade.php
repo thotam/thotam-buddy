@@ -15,6 +15,11 @@
                                 <i wire:key="edit_{{ $loop->index }}" thotam-blockui wire:click.prevent="edit_tieuchi_buddy({{ $buddy_tieuchi->id }})" class='action-icon text-twitter fas fa-edit ml-3'></i>
                                 <i wire:key="trash_{{ $loop->index }}" thotam-blockui wire:click.prevent="delete_tieuchi_buddy({{ $buddy_tieuchi->id }})" class='action-icon text-danger fas fa-trash-alt ml-3'></i>
                             @endif
+
+                            @if ($baocaoStatus && !!!$buddy_tieuchi->lock && ($buddy->trangthai_id == 19 || $buddy->trangthai_id == 21))
+                                <i wire:key="baocao_{{ $loop->index }}" thotam-blockui wire:click.prevent="baocao_tieuchi_buddy({{ $buddy_tieuchi->id }})" class='action-icon text-success fas fa-file-upload ml-4'></i>
+                                <i wire:key="done_{{ $loop->index }}" thotam-blockui wire:click.prevent="done_tieuchi_buddy({{ $buddy_tieuchi->id }})" class='action-icon text-indigo fas fa-check-double ml-4'></i>
+                            @endif
                         </label>
                         <div>
                             <span type="text" class="form-control px-2 h-auto">{{ $buddy_tieuchi->tentieuchi }}</span>
@@ -78,6 +83,74 @@
                     </div>
                 </div>
 
+                @if (count($buddy_tieuchi->baocaos) !== 0)
+                    <div class="col-12">
+                        <div class="form-group mb-1 mt-1 text-success">
+                            <b>Thông tin báo cáo:</b>
+                        </div>
+                    
+                        <div class="row px-3">
+                            @foreach ($buddy_tieuchi->baocaos as $baocao)
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label text-success">Báo cáo {{ $loop->index +1 }} - Kết quả:</label>
+                                        <div>
+                                            <span class="form-control px-2 h-auto">@if($baocao->ketqua) Hoàn thành @else Không hoàn thành @endif</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Thời gian hoàn thành:</label>
+                                        <div>
+                                            <span class="form-control px-2 h-auto">{{ $baocao->thoigian->format('d-m-Y') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 col-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Chi tiết công việc đã thực hiện:</label>
+                                        <div>
+                                            <span class="form-control px-2 h-auto">{{ $baocao->noidung }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if (!!$baocao->ghichu)
+                                    <div class="col-md-12 col-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Ghi chú:</label>
+                                            <div>
+                                                <span class="form-control px-2 h-auto">{{ $baocao->ghichu }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Người báo cáo:</label>
+                                        <div>
+                                            <pre class="form-control px-2 h-auto thotam-pre">{{ $baocao->hr->hoten }}</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Thời gian báo cáo:</label>
+                                        <div>
+                                            <pre class="form-control px-2 h-auto thotam-pre">{{ $baocao->created_at->format("d-m-Y H:i:s") }}</pre>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             @endforeach
         @else
             <span class="text-danger">Chưa có tiêu chí nào</span>
@@ -85,7 +158,7 @@
     </div>
 </div>
 
-@if (!!$buddy->buddy_tieuchi_duyet)
+@if (!!$buddy->buddy_tieuchi_duyet && !$baocaoStatus && !$baoCaoTieuChiStatus)
     <div class="col-12">
         <div class="form-group mb-1 mt-1 text-orange">
             <b>Thông tin duyệt tiêu chí:</b>
