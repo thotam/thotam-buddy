@@ -121,6 +121,24 @@ class Buddy_Seeder extends Seeder
             ]
         );
 
+        $buddy_member = Role::updateOrCreate([
+            'name' => 'buddy-member'
+        ],[
+            "description" => "Buddy Member",
+            "group" => "Buddy",
+            "order" => 999,
+            "lock" => true,
+        ]);
+
+        $buddy_leader = Role::updateOrCreate([
+            'name' => 'buddy-leader'
+        ],[
+            "description" => "Buddy Leader",
+            "group" => "Buddy",
+            "order" => 999,
+            "lock" => true,
+        ]);
+
         //Role and Permission
         $permission[] = Permission::updateOrCreate([
             'name' => 'view-buddy'
@@ -140,6 +158,9 @@ class Buddy_Seeder extends Seeder
             "lock" => true,
         ]);
 
+        $buddy_member->givePermissionTo('add-buddy');
+        $buddy_leader->givePermissionTo('add-buddy');
+
         $permission[] = Permission::updateOrCreate([
             'name' => 'edit-buddy'
         ],[
@@ -148,6 +169,9 @@ class Buddy_Seeder extends Seeder
             "order" => 3,
             "lock" => true,
         ]);
+
+        $buddy_member->givePermissionTo('edit-buddy');
+        $buddy_leader->givePermissionTo('edit-buddy');
 
         $permission[] = Permission::updateOrCreate([
             'name' => 'delete-buddy'
@@ -158,12 +182,24 @@ class Buddy_Seeder extends Seeder
             "lock" => true,
         ]);
 
+        $buddy_member->givePermissionTo('delete-buddy');
+        $buddy_leader->givePermissionTo('delete-buddy');
+
         $permission[] = Permission::updateOrCreate([
             'name' => 'duyet-buddy'
         ],[
             "description" => "Duyệt Buddy",
             "group" => "Buddy",
             "order" => 5,
+            "lock" => true,
+        ]);
+
+        $permission[] = Permission::updateOrCreate([
+            'name' => 'danhgia-buddy'
+        ],[
+            "description" => "Đánh giá Buddy",
+            "group" => "Buddy",
+            "order" => 6,
             "lock" => true,
         ]);
 
