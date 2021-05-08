@@ -88,13 +88,15 @@ trait BuddyTraits
      */
     public function edit_buddy(Buddy $buddy)
     {
-        if ($this->hr->cannot("edit-buddy")) {
+        if ($this->hr->cannot("edit-buddy") && !$this->hr->is_thanhvien && !$this->hr->is_quanly) {
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Bạn không có quyền thực hiện hành động này"]);
             $this->cancel();
             return null;
         }
 
         $this->buddy = $buddy;
+
+        $this->buddy_id = $this->buddy->id;
 
         if ($this->buddy->trangthai_id !== 5) {
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Chỉ Buddy ở trạng thái Mới tạo mới có thể chỉnh sửa"]);
@@ -139,7 +141,7 @@ trait BuddyTraits
      */
     public function save_buddy()
     {
-        if ($this->hr->cannot("add-buddy") && $this->hr->cannot("edit-buddy")) {
+        if ($this->hr->cannot("add-buddy") && $this->hr->cannot("edit-buddy") && !$this->hr->is_thanhvien && !$this->hr->is_quanly) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Bạn không có quyền thực hiện hành động này"]);
             return null;

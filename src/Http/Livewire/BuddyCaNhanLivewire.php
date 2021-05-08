@@ -129,7 +129,7 @@ class BuddyCaNhanLivewire extends Component
      */
     public function add_buddy()
     {
-        if ($this->hr->cannot("add-buddy")) {
+        if ($this->hr->cannot("add-buddy") && !$this->hr->is_thanhvien && !$this->hr->is_quanly) {
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Bạn không có quyền thực hiện hành động này"]);
             $this->cancel();
             return null;

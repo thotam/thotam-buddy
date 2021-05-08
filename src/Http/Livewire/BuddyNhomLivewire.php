@@ -384,6 +384,12 @@ class BuddyNhomLivewire extends Component
         ]);
         $this->dispatchBrowserEvent('blockUI');
 
+        if ($this->danhgia_ketqua == 25 && $this->danhgia_thuongtien == 1) {
+            $this->dispatchBrowserEvent('unblockUI');
+            $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy không đạt, không thể đề xuất thưởng tiền"]);
+            return null;
+        }
+
         try {
             $this->buddy->buddy_danhgia()->delete();
 
@@ -400,6 +406,7 @@ class BuddyNhomLivewire extends Component
             
             $this->buddy->update([
                 "trangthai_id" => $this->danhgia_ketqua,
+                "thuongtien" => $this->danhgia_thuongtien,
             ]);
         } catch (\Illuminate\Database\QueryException $e) {
             $this->dispatchBrowserEvent('unblockUI');

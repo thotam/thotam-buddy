@@ -58,6 +58,16 @@ class BuddyCaNhanTable extends LivewireDatatable
 
             Column::name('trangthai.trangthai')->label("Trạng thái")->filterable($this->trangthais),
 
+            Column::callback(['thuongtien', 'trangthai_id'], function ($thuongtien, $trangthai_id) {
+                if ($trangthai_id < 25) {
+                    return 'Chưa đánh giá';
+                } elseif (!!$thuongtien) {
+                    return 'Có';
+                } else {
+                    return 'Không';
+                }
+            })->label("Đề xuất thưởng tiền"),
+
             Column::name('nguoihuongdans.hoten')->label("Người hướng dẫn")->filterable(),
 
             Column::name('nhucau')->label("Nhu cầu đào tạo"),
