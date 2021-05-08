@@ -14,7 +14,7 @@ class BuddyController extends Controller
      */
     public function canhan()
     {
-        if (Auth::user()->hr->hasAnyPermission(["view-buddy", "add-buddy", "edit-buddy", "delete-buddy", "duyet-buddy", ])) {
+        if (Auth::user()->hr->hasAnyPermission(["view-buddy", "add-buddy", "edit-buddy", "delete-buddy", "duyet-buddy", ]) || Auth::user()->hr->is_thanhvien || Auth::user()->hr->is_quanly) {
             return view('thotam-buddy::canhan', ['title' => 'Buddy - Cá nhân']);
         } else {
             return view('errors.dynamic', [
@@ -32,7 +32,7 @@ class BuddyController extends Controller
      */
     public function nhom()
     {
-        if (Auth::user()->hr->hasAnyPermission(["view-buddy", "add-buddy", "edit-buddy", "delete-buddy", "duyet-buddy", ])) {
+        if (Auth::user()->hr->hasAnyPermission(["view-buddy", "add-buddy", "edit-buddy", "delete-buddy", "duyet-buddy", ]) || Auth::user()->hr->is_quanly) {
             return view('thotam-buddy::nhom', ['title' => 'Buddy - Nhóm']);
         } else {
             return view('errors.dynamic', [
