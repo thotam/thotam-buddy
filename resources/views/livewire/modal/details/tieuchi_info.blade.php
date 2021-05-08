@@ -4,7 +4,7 @@
     </div>
 
     <div class="row px-3">
-        @if (count($buddy_tieuchies) !== 0)
+        @if (count($buddy_tieuchies) != 0)
             @foreach ($buddy_tieuchies as $buddy_tieuchi)
                 <div class="col-md-12 col-12 mt-1">
                     <div class="form-group">
@@ -83,7 +83,7 @@
                     </div>
                 </div>
 
-                @if (count($buddy_tieuchi->baocaos) !== 0)
+                @if (count($buddy_tieuchi->baocaos) != 0)
                     <div class="col-12">
                         <div class="form-group mb-1 mt-1 text-success">
                             <b>Thông tin báo cáo:</b>

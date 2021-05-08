@@ -98,13 +98,13 @@ trait BuddyTraits
 
         $this->buddy_id = $this->buddy->id;
 
-        if ($this->buddy->trangthai_id !== 5) {
+        if ($this->buddy->trangthai_id != 5) {
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Chỉ Buddy ở trạng thái Mới tạo mới có thể chỉnh sửa"]);
             $this->cancel();
             return null;
         }
 
-        if (($this->buddy->hr_key !== $this->hr->key) && (!$this->quanly_of_nhomids->contains($this->buddy->nhom_id)) && (!$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"]))) {
+        if (($this->buddy->hr_key != $this->hr->key) && (!$this->quanly_of_nhomids->contains($this->buddy->nhom_id)) && (!$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"]))) {
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Chỉ người đăng ký, quản lý của người đăng ký hoặc Admin mới có quyền sửa Buddy này"]);
             $this->cancel();
             return null;
@@ -148,13 +148,13 @@ trait BuddyTraits
         }
 
         if ($this->editStatus) {
-            if ($this->buddy->trangthai_id !== 5) {
+            if ($this->buddy->trangthai_id != 5) {
                 $this->dispatchBrowserEvent('unblockUI');
                 $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Chỉ Buddy ở trạng thái Mới tạo mới có thể chỉnh sửa"]);
                 return null;
             }
 
-            if (($this->buddy->hr_key !== $this->hr->key) && (!$this->quanly_of_nhomids->contains($this->buddy->nhom_id)) && (!$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"]))) {
+            if (($this->buddy->hr_key != $this->hr->key) && (!$this->quanly_of_nhomids->contains($this->buddy->nhom_id)) && (!$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"]))) {
                 $this->dispatchBrowserEvent('unblockUI');
                 $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Chỉ người đăng ký, quản lý của người đăng ký hoặc Admin mới có quyền sửa Buddy này"]);
                 return null;
@@ -223,13 +223,13 @@ trait BuddyTraits
     {
         $this->buddy = $buddy;
 
-        if ($this->buddy->trangthai_id !== 5) {
+        if ($this->buddy->trangthai_id != 5) {
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Chỉ Buddy ở trạng thái Mới tạo mới có thể xóa"]);
             $this->cancel();
             return null;
         }
 
-        if (($this->buddy->hr_key !== $this->hr->key) && (!$this->quanly_of_nhomids->contains($this->buddy->nhom_id)) && (!$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"]))) {
+        if (($this->buddy->hr_key != $this->hr->key) && (!$this->quanly_of_nhomids->contains($this->buddy->nhom_id)) && (!$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"]))) {
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Chỉ người đăng ký, quản lý của người đăng ký hoặc Admin mới có quyền xóa Buddy này"]);
             $this->cancel();
             return null;
@@ -251,13 +251,13 @@ trait BuddyTraits
      */
     public function delete_buddy_action()
     {
-        if ($this->buddy->trangthai_id !== 5) {
+        if ($this->buddy->trangthai_id != 5) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Chỉ Buddy ở trạng thái Mới tạo mới có thể xóa"]);
             return null;
         }
         
-        if (($this->buddy->hr_key !== $this->hr->key) && (!$this->quanly_of_nhomids->contains($this->buddy->nhom_id)) && (!$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"]))) {
+        if (($this->buddy->hr_key != $this->hr->key) && (!$this->quanly_of_nhomids->contains($this->buddy->nhom_id)) && (!$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"]))) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Chỉ người đăng ký, quản lý của người đăng ký hoặc Admin mới có quyền xóa Buddy này"]);
             return null;
@@ -292,13 +292,13 @@ trait BuddyTraits
             return null;
         }
 
-        if (($this->buddy->trangthai_id !== 9 && $this->buddy->trangthai_id !== 11 && Str::contains(get_class($this), 'BuddyCaNhanLivewire'))) {
+        if (($this->buddy->trangthai_id != 9 && $this->buddy->trangthai_id != 11 && Str::contains(get_class($this), 'BuddyCaNhanLivewire'))) {
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể lên tiêu chí"]);
             $this->cancel();
             return null;
         }
 
-        if (($this->buddy->trangthai_id !== 13 && Str::contains(get_class($this), 'BuddyNhomLivewire'))) {
+        if (($this->buddy->trangthai_id != 13 && Str::contains(get_class($this), 'BuddyNhomLivewire'))) {
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể duyệt tiêu chí"]);
             $this->cancel();
             return null;
@@ -334,7 +334,7 @@ trait BuddyTraits
             return null;
         }
 
-        if ($this->buddy->trangthai_id !== 9 && $this->buddy->trangthai_id !== 11) {
+        if ($this->buddy->trangthai_id != 9 && $this->buddy->trangthai_id != 11) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể lên tiêu chí"]);
             return null;
@@ -381,13 +381,13 @@ trait BuddyTraits
             return null;
         }
 
-        if (($this->buddy->trangthai_id !== 9 && $this->buddy->trangthai_id !== 11 && Str::contains(get_class($this), 'BuddyCaNhanLivewire'))) {
+        if (($this->buddy->trangthai_id != 9 && $this->buddy->trangthai_id != 11 && Str::contains(get_class($this), 'BuddyCaNhanLivewire'))) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể lên tiêu chí"]);
             return null;
         }
 
-        if (($this->buddy->trangthai_id !== 13 && Str::contains(get_class($this), 'BuddyNhomLivewire'))) {
+        if (($this->buddy->trangthai_id != 13 && Str::contains(get_class($this), 'BuddyNhomLivewire'))) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể chỉnh sửa tiêu chí"]);
             return null;
@@ -482,13 +482,13 @@ trait BuddyTraits
             return null;
         }
 
-        if (($this->buddy->trangthai_id !== 9 && $this->buddy->trangthai_id !== 11 && Str::contains(get_class($this), 'BuddyCaNhanLivewire'))) {
+        if (($this->buddy->trangthai_id != 9 && $this->buddy->trangthai_id != 11 && Str::contains(get_class($this), 'BuddyCaNhanLivewire'))) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể xóa tiêu chí"]);
             return null;
         }
 
-        if (($this->buddy->trangthai_id !== 13 && Str::contains(get_class($this), 'BuddyNhomLivewire'))) {
+        if (($this->buddy->trangthai_id != 13 && Str::contains(get_class($this), 'BuddyNhomLivewire'))) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể xóa tiêu chí"]);
             return null;
@@ -565,7 +565,7 @@ trait BuddyTraits
             return null;
         }
 
-        if ($this->buddy->trangthai_id !== 9 && $this->buddy->trangthai_id !== 11) {
+        if ($this->buddy->trangthai_id != 9 && $this->buddy->trangthai_id != 11) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể xóa tiêu chí"]);
             return null;

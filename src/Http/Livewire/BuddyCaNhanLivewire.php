@@ -163,13 +163,13 @@ class BuddyCaNhanLivewire extends Component
     {
         $this->buddy = $buddy;
 
-        if ($this->buddy->trangthai_id !== 19 && $this->buddy->trangthai_id !== 21) {
+        if ($this->buddy->trangthai_id != 19 && $this->buddy->trangthai_id != 21) {
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể báo cáo tiêu chí"]);
             $this->cancel();
             return null;
         }
 
-        if ($this->buddy->hr_key !== $this->hr->key) {
+        if ($this->buddy->hr_key != $this->hr->key) {
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Bạn không phải là người đăng ký Buddy này"]);
             $this->cancel();
             return null;
@@ -224,13 +224,13 @@ class BuddyCaNhanLivewire extends Component
     
     public function baocao_tieuchi_buddy_save()
     {
-        if ($this->buddy->trangthai_id !== 19 && $this->buddy->trangthai_id !== 21) {
+        if ($this->buddy->trangthai_id != 19 && $this->buddy->trangthai_id != 21) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể báo cáo tiêu chí"]);
             return null;
         }
 
-        if ($this->buddy->hr_key !== $this->hr->key) {
+        if ($this->buddy->hr_key != $this->hr->key) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Bạn không phải là người đăng ký Buddy này"]);
             return null;
@@ -304,13 +304,13 @@ class BuddyCaNhanLivewire extends Component
 
     public function done_tieuchi_buddy_save()
     {
-        if ($this->buddy->trangthai_id !== 19 && $this->buddy->trangthai_id !== 21) {
+        if ($this->buddy->trangthai_id != 19 && $this->buddy->trangthai_id != 21) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy này đang ở trạng thái không thể hoàn thành tiêu chí"]);
             return null;
         }
 
-        if ($this->buddy->hr_key !== $this->hr->key) {
+        if ($this->buddy->hr_key != $this->hr->key) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Bạn không phải là người đăng ký Buddy này"]);
             return null;

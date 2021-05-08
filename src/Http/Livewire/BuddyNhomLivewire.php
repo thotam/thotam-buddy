@@ -161,7 +161,7 @@ class BuddyNhomLivewire extends Component
     {
         $this->buddy = $buddy;
 
-        if ($this->buddy->trangthai_id !== 5 && $this->buddy->trangthai_id !== 7 && $this->buddy->trangthai_id !== 9) {
+        if ($this->buddy->trangthai_id != 5 && $this->buddy->trangthai_id != 7 && $this->buddy->trangthai_id != 9) {
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy đang ở trạng thái không thể duyệt"]);
             $this->cancel();
             return null;
@@ -203,7 +203,7 @@ class BuddyNhomLivewire extends Component
      */
     public function save_duyet_buddy()
     {
-        if ($this->buddy->trangthai_id !== 5 && $this->buddy->trangthai_id !== 7 && $this->buddy->trangthai_id !== 9) {
+        if ($this->buddy->trangthai_id != 5 && $this->buddy->trangthai_id != 7 && $this->buddy->trangthai_id != 9) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy đang ở trạng thái không thể duyệt"]);
             return null;
@@ -338,7 +338,7 @@ class BuddyNhomLivewire extends Component
     {
         $this->buddy = $buddy;
 
-        if ($this->buddy->trangthai_id !== 23) {
+        if ($this->buddy->trangthai_id != 23) {
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy đang ở trạng thái không thể đánh giá"]);
             $this->cancel();
             return null;
@@ -363,7 +363,7 @@ class BuddyNhomLivewire extends Component
 
     public function save_danhgia_buddy()
     {
-        if ($this->buddy->trangthai_id !== 23) {
+        if ($this->buddy->trangthai_id != 23) {
             $this->dispatchBrowserEvent('unblockUI');
             $this->dispatchBrowserEvent('toastr', ['type' => 'warning', 'title' => "Thất bại", 'message' => "Buddy đang ở trạng thái không thể đánh giá"]);
             return null;

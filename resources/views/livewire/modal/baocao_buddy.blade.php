@@ -42,7 +42,7 @@
                                     </div>
                                 </div>
 
-                                @if (count($buddy_tieuchies) !== 0)
+                                @if (count($buddy_tieuchies) != 0)
                                     @include('thotam-buddy::livewire.modal.details.tieuchi_info')
                                 @endif
 
@@ -112,7 +112,7 @@
                                         </div>
                                     @endif
 
-                                    @if (count($buddy_tieuchi->baocaos) !== 0)
+                                    @if (count($buddy_tieuchi->baocaos) != 0)
                                         <div class="col-12">
                                             <div class="form-group mb-1 mt-1 text-success">
                                                 <b>Thông tin báo cáo:</b>
@@ -282,7 +282,7 @@
                                         </div>
                                     @endif
 
-                                    @if (count($buddy_tieuchi->baocaos) !== 0)
+                                    @if (count($buddy_tieuchi->baocaos) != 0)
                                         <div class="col-12">
                                             <div class="form-group mb-1 mt-1 text-success">
                                                 <b>Thông tin báo cáo:</b>
