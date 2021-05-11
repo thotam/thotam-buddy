@@ -75,10 +75,10 @@ class BuddyNhomTable extends LivewireDatatable
     public function getNhomsProperty()
     {
         if (!$this->hr->hasAnyRole(["super-admin", "admin", "admin-buddy"]) && !$this->hr->hasAnyPermission(["view-buddy"])) {
-            $nhom_arrays = Nhom::where('active', true)->get();
-        } else {
             $nhom_arrays = $this->hr->quanly_of_nhoms;
             $nhom_arrays = $nhom_arrays->merge($this->hr->thanhvien_of_nhoms);
+        } else {
+            $nhom_arrays = Nhom::where('active', true)->get();
         }
 
         return $nhom_arrays->pluck("full_name");
