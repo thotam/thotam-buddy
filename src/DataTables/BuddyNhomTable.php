@@ -40,7 +40,7 @@ class BuddyNhomTable extends LivewireDatatable
         return [
             Column::callback(['id', 'trangthai_id'], function ($id, $trangthai_id) {
                 return view('thotam-buddy::table-actions.buddy-nhom-table-actions', ['id' => $id, 'trangthai_id' => $trangthai_id]);
-            })->label("Action"),
+            })->label("Action")->sortBy('buddies.id')->defaultSort('desc'),
 
             Column::name('buddy_code')->label("Mã Buddy")->filterable()->searchable(),
 
