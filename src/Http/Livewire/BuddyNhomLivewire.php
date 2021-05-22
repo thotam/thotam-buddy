@@ -17,7 +17,7 @@ class BuddyNhomLivewire extends Component
     use BuddyTraits;
 
     public $ngayvaolam, $nguoihuongdan, $duyet_ketqua, $duyet_ghichu;
-    public $nguoihuongdan_arrays = [];
+    public $nguoihuongdan_arrays = [], $nhom_nguoihuongdan_arrays = [];
     public $buddy_duyet;
     public $danhgia_ketqua, $danhgia_thuongtien, $danhgia_noidung, $danhgia_ghichu;
 
@@ -150,6 +150,16 @@ class BuddyNhomLivewire extends Component
     {
         $this->dispatchBrowserEvent('dynamic_update');
     }
+    
+    /**
+     * updatedNguoihuongdan
+     *
+     * @return void
+     */
+    public function updatedNguoihuongdan()
+    {
+        $this->nguoihuongdan = array_unique($this->nguoihuongdan);
+    }
 
     /**
      * duyet_buddy
@@ -178,8 +188,19 @@ class BuddyNhomLivewire extends Component
         $this->toastr_message = "Duyệt Buddy thành công";
         $this->ngayvaolam = !!$this->hr->ngaythuviec ? $this->hr->ngaythuviec->format("d-m-Y") : NULL;
 
-        $this->nguoihuongdan_arrays = Nhom::find($this->buddy->nhom_id)->nhom_has_quanlys->pluck("hoten", "key");
-        $this->nguoihuongdan_arrays = $this->nguoihuongdan_arrays->merge(Nhom::find($this->buddy->nhom_id)->nhom_has_thanhviens->pluck("hoten", "key"));
+        $this->nhom_nguoihuongdan_arrays = Nhom::select('nhoms.id', 'nhoms.full_name')->where('nhoms.active', true)->orderBy('nhoms.order', 'desc')
+                ->with([
+                    'nhom_has_thanhviens' => function ($query) {
+                        $query->select('hrs.key', 'hrs.hoten', 'hrs.active')->where('hrs.active', true);
+                    },
+                    'nhom_has_quanlys' => function ($query2) {
+                        $query2->select('hrs.key', 'hrs.hoten', 'hrs.active')->where('hrs.active', true);
+                    }
+                ])
+                ->get()->toArray();
+
+        // $this->nguoihuongdan_arrays = Nhom::find($this->buddy->nhom_id)->nhom_has_quanlys->pluck("hoten", "key");
+        // $this->nguoihuongdan_arrays = $this->nguoihuongdan_arrays->merge(Nhom::find($this->buddy->nhom_id)->nhom_has_thanhviens->pluck("hoten", "key"));
 
         $this->buddy_duyet = $this->buddy->buddy_duyet;
 

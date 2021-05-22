@@ -46,17 +46,48 @@
                                 </div>
 
                                 @if ($duyet_ketqua == 9)
+
+                                {{--  <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label text-indigo" for="nguoihuongdan">Người hướng dẫn:</label>
+                                        <div class="select2-success" id="nguoihuongdan_div">
+                                            <select class="form-control px-2 thotam-select2-multi" multiple thotam-placeholder="Người hướng dẫn ..." thotam-search="10" wire:model="nguoihuongdan" id="nguoihuongdan" style="width: 100%">
+                                                @if (!!count($nguoihuongdan_arrays))
+                                                    <option selected></option>
+                                                    @foreach ($nguoihuongdan_arrays as $key => $hoten)
+                                                        <option value="{{ $key }}">[{{ $key }}] {{ $hoten }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                        @error('nguoihuongdan')
+                                            <label class="pl-1 small invalid-feedback d-inline-block" ><i class="fas mr-1 fa-exclamation-circle"></i>{{ $message }}</label>
+                                        @enderror
+                                    </div>
+                                </div>  --}}
+
                                     <div class="col-12">
                                         <div class="form-group">
                                             <label class="col-form-label text-indigo" for="nguoihuongdan">Người hướng dẫn:</label>
                                             <div class="select2-success" id="nguoihuongdan_div">
                                                 <select class="form-control px-2 thotam-select2-multi" multiple thotam-placeholder="Người hướng dẫn ..." thotam-search="10" wire:model="nguoihuongdan" id="nguoihuongdan" style="width: 100%">
-                                                    @if (!!count($nguoihuongdan_arrays))
-                                                        <option selected></option>
-                                                        @foreach ($nguoihuongdan_arrays as $key => $hoten)
-                                                            <option value="{{ $key }}">[{{ $key }}] {{ $hoten }}</option>
+                                                    
+                                                    @if (!!count($nhom_nguoihuongdan_arrays))
+                                                        @foreach ($nhom_nguoihuongdan_arrays as $nhom)
+                                                            <optgroup label="{{ $nhom['full_name'] }}">
+
+                                                                @foreach ($nhom['nhom_has_quanlys'] as $quanly)
+                                                                    <option value="{{ $quanly['key'] }}">[{{ $quanly['key'] }}] {{ $quanly['hoten'] }}</option>
+                                                                @endforeach
+        
+                                                                @foreach ($nhom['nhom_has_thanhviens'] as $thanhvien)
+                                                                    <option value="{{ $thanhvien['key'] }}">[{{ $thanhvien['key'] }}] {{ $thanhvien['hoten'] }}</option>
+                                                                @endforeach
+        
+                                                            </optgroup>
                                                         @endforeach
                                                     @endif
+
                                                 </select>
                                             </div>
                                             @error('nguoihuongdan')
