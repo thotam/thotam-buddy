@@ -170,7 +170,7 @@
                 <div class="form-group">
                     <label class="col-form-label">Người duyệt:</label>
                     <div>
-                        <pre class="form-control px-2 h-auto thotam-pre">{{ $buddy_tieuchi->hr->hoten }}</pre>
+                        <pre class="form-control px-2 h-auto thotam-pre">{{ $buddy_tieuchi->buddy_tieuchi_duyet->hr->hoten }}</pre>
                     </div>
                 </div>
             </div>
