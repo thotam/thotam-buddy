@@ -14,7 +14,7 @@ use Thotam\ThotamBuddy\Http\Controllers\BuddyController;
 |
 */
 
-Route::middleware(['web','CheckBrowser', 'auth', 'CheckAccount', 'CheckHr', 'CheckInfo'])->group(function () {
+Route::middleware(['web','auth', 'CheckAccount', 'CheckHr', 'CheckInfo'])->group(function () {
 
     //Route Buddy
     Route::redirect('buddy', '/', 301);
