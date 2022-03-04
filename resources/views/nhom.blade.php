@@ -1,27 +1,35 @@
 @extends('layouts.layout-2')
 @section('styles')
-    <link rel="stylesheet" href="{{ mix('/vendor/libs/datatables/datatables.css') }}">
-    <link rel="stylesheet" href="{{ mix('/vendor/libs/select2/select2.css') }}">
-    <link rel="stylesheet" href="{{ mix('/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css') }}">
+	<link rel="stylesheet" href="{{ mix('/vendor/libs/datatables/datatables.css') }}">
+	<link rel="stylesheet" href="{{ mix('/vendor/libs/select2/select2.css') }}">
+	<link rel="stylesheet" href="{{ mix('/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css') }}">
+	<link rel="stylesheet" href="{{ mix('/vendor/libs/plyr/plyr.css') }}">
 @endsection
 
 @section('scripts')
-    <!-- Dependencies -->
-    <script src="{{ mix('/vendor/libs/datatables/datatables.js') }}"></script>
-    <script src="{{ mix('/vendor/libs/select2/select2.js') }}"></script>
-    <script src="{{ mix('/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
+	<!-- Dependencies -->
+	<script src="{{ mix('/vendor/libs/moment/moment.js') }}"></script>
+	<script src="{{ mix('/vendor/libs/datatables/datatables.js') }}"></script>
+	<script src="{{ mix('/vendor/libs/select2/select2.js') }}"></script>
+	<script src="{{ mix('/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js') }}"></script>
+	<script src="{{ mix('/vendor/libs/bootstrap-filestyle2/bootstrap-filestyle.js') }}"></script>
+	<script src="{{ mix('/vendor/libs/handlebars/handlebars.js') }}"></script>
 @endsection
 
+@push('datatables')
+	<script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
+	{{ $dataTable->scripts() }}
+@endpush
+
 @section('content')
-    <h4 class="font-weight-bold py-3 mb-4">{{ $title }}</h4>
+	<h4 class="font-weight-bold py-3 mb-4">{{ $title }}</h4>
 
-    <div class="card">
+	<div class="card">
 
-        @livewire('thotam-buddy::buddy-nhom-livewire')
+		@livewire('thotam-buddy::buddy-nhom-livewire')
 
-        <div class="px-4 mb-4">
-            @livewire('thotam-buddy::buddy-nhom-datatable')
-        </div>
-    </div>
-
+		<div class="card-datatable table-responsive pt-2">
+			{{ $dataTable->table(['thotam-datatables', 'class' => 'table table-striped table-bordered', 'width' => '100%']) }}
+		</div>
+	</div>
 @endsection
